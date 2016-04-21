@@ -11,32 +11,37 @@ public class Solution2 {
         restoreIpAddressesHelper(result, list, s, 0);
         return result;
     }
-    private void restoreIpAddressesHelper(ArrayList<String> result, ArrayList<String> list, String s, int pos) {
+    private void restoreIpAddressesHelper(ArrayList<String> result, 
+                                          ArrayList<String> list, 
+                                          String s, int pos) {
             if (list.size() == 4) {
                 if (pos == s.length()) {
-                    StringBuilder temp = new StringBuilder();
-                    for (String ss: list) {
-                        temp.append(ss + ".");
+                    String temp = new String();
+                    for (int i = 0; i < 3; ++i) {
+                        temp += (list.get(i) + ".");
                     }
-                    temp.deleteCharAt(temp.length() - 1);
-                    result.add(temp.toString());
+                    temp += list.get(3);
+                    result.add(temp);
                 }
                 return;
             }
 
-            for (int i = pos; i < pos + 3 && i < s.length(); i++) {
-                if (s.charAt(pos) == '0' && i > pos) {
-                    break;
+            for (int i = pos; i <= pos + 3 && i < s.length(); ++i) {
+                String cur = s.substring(pos, i + 1);
+                if (isValidNum(cur)) {
+                    list.add(cur);
+                    restoreIpAddressesHelper(result, list, s, i + 1);
+                    list.remove(list.size() - 1);
                 }
-                String pre = s.substring(pos, i + 1);
-                int num = Integer.parseInt(pre);
-                if (num > 255) {
-                    continue;
-                }
-            
-                list.add(pre);
-                restoreIpAddressesHelper(result, list, s, i + 1);
-                list.remove(list.size() - 1);
             }
+    }
+    private boolean isValidNum (String s) {
+        if (Integer.valueOf(s) < 0 || Integer.valueOf(s) > 255) {
+            return false;
+        }
+        if (s.charAt(0) == '0' && !s.equals("0")) {
+            return false;
+        }
+        return true;
     }
 }
