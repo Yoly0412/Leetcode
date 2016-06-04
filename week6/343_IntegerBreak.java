@@ -1,0 +1,19 @@
+public class Solution {
+    public int integerBreak(int n) {
+        int res = 1;
+        if (n <= 3) {
+            return n - 1;
+        }
+        while (n >= 3) {
+            n -= 3;
+            res *=3;
+        }
+        if (n == 1) {
+            res = res / 3 * 4;
+        }
+        if (n == 2) {
+            res *= 2;
+        }
+        return res;
+    }
+}
